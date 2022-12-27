@@ -59,7 +59,7 @@ resource "aws_eks_cluster" "ms-sssm" {
 }
 
 data "aws_eks_cluster_auth" "ms-sssm" {
-	name = "ms-sssm"
+	name = local.cluster_name
 }
 
 resource "aws_iam_role" "ms-node" {
