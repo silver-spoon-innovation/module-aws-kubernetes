@@ -117,7 +117,7 @@ resource "aws_eks_node_group" "ms-node-group" {
 }
 
 resource "local_file" "kubeconfig" {
-	content = <<KUBECONFIG_END
+  content = <<KUBECONFIG_END
 apiVersion: v1
 clusters:
 - cluster:
