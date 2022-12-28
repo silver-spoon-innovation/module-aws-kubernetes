@@ -121,13 +121,13 @@ resource "local_file" "kubeconfig" {
 apiVersion: v1
 clusters:
 - cluster:
-	certificate-authority-data: ${aws_eks_cluster.ms-sssm.certificate_authority.0.data}
-	server: ${aws_eks_cluster.ms-sssm.endpoint}
+   certificate-authority-data: ${aws_eks_cluster.ms-sssm.certificate_authority.0.data}
+   server: ${aws_eks_cluster.ms-sssm.endpoint}
   name: ${aws_eks_cluster.ms-sssm.arn}
 contexts:
 - context:
-	cluster: ${aws_eks_cluster.ms-sssm.arn}
-	user: ${aws_eks_cluster.ms-sssm.arn}
+   cluster: ${aws_eks_cluster.ms-sssm.arn}
+   user: ${aws_eks_cluster.ms-sssm.arn}
   name: ${aws_eks_cluster.ms-sssm.arn}
 current-context: ${aws_eks_cluster.ms-sssm.arn}
 kind: Config
@@ -135,7 +135,14 @@ preferences: {}
 users:
 - name: ${aws_eks_cluster.ms-sssm.arn}
   user:
-	token: ${data.aws_eks_cluster_auth.ms-sssm.token}
+   exec:
+    apiVersion: client.authentication.k8s.io/v1beta1
+    command: aws
+    args:
+     - "eks"
+     - "get-token"
+     - "--cluster-name"
+     - "${aws_eks_cluster.ms-sssm.name}"
 	KUBECONFIG_END
   filename = "kubeconfig"
 }
