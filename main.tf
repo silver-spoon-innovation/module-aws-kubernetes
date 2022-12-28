@@ -17,7 +17,8 @@ resource "aws_iam_role" "ms-cluster" {
         Principal = {
           Service = "eks.amazonaws.com"
         }
-        Action = "sts:AssumeRole"
+        Action          = "sts:AssumeRole"
+        DurationSeconds = 3600
       },
     ]
   })
@@ -70,6 +71,7 @@ resource "aws_iam_role" "ms-node" {
           Service = "ec2.amazonaws.com"
         }
         Action = "sts:AssumeRole"
+        DurationSeconds = 3600
       },
     ]
   })
