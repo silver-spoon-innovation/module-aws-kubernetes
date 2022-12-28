@@ -130,10 +130,10 @@ resource "aws_eks_node_group" "ms-node-group" {
   ]
 }
 
-# resource "aws_eks_addon" "csi" {
-#   cluster_name = aws_eks_cluster.ms-sssm.name
-#   addon_name   = "aws-ebs-csi-driver"
-# }
+resource "aws_eks_addon" "csi" {
+  cluster_name = aws_eks_cluster.ms-sssm.name
+  addon_name   = "aws-ebs-csi-driver"
+}
 
 resource "local_file" "kubeconfig" {
   content  = <<KUBECONFIG_END
