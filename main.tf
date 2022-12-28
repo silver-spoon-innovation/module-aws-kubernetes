@@ -94,21 +94,6 @@ resource "aws_iam_role_policy_attachment" "ms-node-AmazonEC2ContainerRegistryRea
   role       = aws_iam_role.ms-node.name
 }
 
-resource "aws_iam_role_policy_attachment" "ms-node-EC2InstanceProfileForImageBuilderECRContainerBuilds" {
-  policy_arn = "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds"
-  role       = aws_iam_role.ms-node.name
-}
-
-resource "aws_iam_role_policy_attachment" "ms-node-CloudWatchAgentServerPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-  role       = aws_iam_role.ms-node.name
-}
-
-resource "aws_iam_role_policy_attachment" "ms-node-AmazonEBSCSIDriverPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-  role       = aws_iam_role.ms-node.name
-}
-
 resource "aws_eks_node_group" "ms-node-group" {
   cluster_name    = aws_eks_cluster.ms-sssm.name
   node_group_name = "microservices"
@@ -126,13 +111,9 @@ resource "aws_eks_node_group" "ms-node-group" {
 
   depends_on = [
     aws_iam_role_policy_attachment.ms-node-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.ms-node-AmazonEKS_CNI_Policy
+    aws_iam_role_policy_attachment.ms-node-AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.ms-node-AmazonEC2ContainerRegistryReadOnly
   ]
-}
-
-resource "aws_eks_addon" "csi" {
-  cluster_name = aws_eks_cluster.ms-sssm.name
-  addon_name   = "aws-ebs-csi-driver"
 }
 
 resource "local_file" "kubeconfig" {
