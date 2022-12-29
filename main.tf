@@ -70,7 +70,6 @@ resource "aws_iam_role" "ms-node" {
           Service = "ec2.amazonaws.com"
         }
         Action = "sts:AssumeRole"
-        DurationSeconds = 3600
       },
     ]
   })
