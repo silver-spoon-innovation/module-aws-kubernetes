@@ -18,7 +18,6 @@ resource "aws_iam_role" "ms-cluster" {
           Service = "eks.amazonaws.com"
         }
         Action          = "sts:AssumeRole"
-        DurationSeconds = 3600
       },
     ]
   })
