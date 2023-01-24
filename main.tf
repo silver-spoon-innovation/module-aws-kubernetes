@@ -120,7 +120,7 @@ resource "aws_iam_role_policy_attachment" "ms-node-AmazonEC2ContainerRegistryRea
   role       = aws_iam_role.ms-node.name
 }
 
-resoucre "aws_iam_role_policy_attachment" "ms-node-Amazon_EBS_CSI_Driver" {
+resource "aws_iam_role_policy_attachment" "ms-node-Amazon_EBS_CSI_Driver" {
   policy_arn = aws_iam_policy.ms-node-ebs-policy.arn
   role       = aws_iam_role.ms-node.name
 }
