@@ -75,6 +75,36 @@ resource "aws_iam_role" "ms-node" {
   })
 }
 
+resource "aws_iam_policy" "ms-node-ebs-policy" {
+  name = "Amazon_EBS_CSI_Driver"
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AttachVolume",
+        "ec2:CreateSnapshot",
+        "ec2:CreateTags",
+        "ec2:CreateVolume",
+        "ec2:DeleteSnapshot",
+        "ec2:DeleteTags",
+        "ec2:DeleteVolume",
+        "ec2:DescribeInstances",
+        "ec2:DescribeSnapshots",
+        "ec2:DescribeTags",
+        "ec2:DescribeVolumes",
+        "ec2:DetachVolume"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+POLICY
+}
+
 resource "aws_iam_role_policy_attachment" "ms-node-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.ms-node.name
@@ -87,6 +117,11 @@ resource "aws_iam_role_policy_attachment" "ms-node-AmazonEKS_CNI_Policy" {
 
 resource "aws_iam_role_policy_attachment" "ms-node-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  role       = aws_iam_role.ms-node.name
+}
+
+resoucre "aws_iam_role_policy_attachment" "ms-node-Amazon_EBS_CSI_Driver" {
+  policy_arn = aws_iam_policy.ms-node-ebs-policy.arn
   role       = aws_iam_role.ms-node.name
 }
 
@@ -110,6 +145,11 @@ resource "aws_eks_node_group" "ms-node-group" {
     aws_iam_role_policy_attachment.ms-node-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.ms-node-AmazonEC2ContainerRegistryReadOnly
   ]
+}
+
+resource "aws_eks_addon" "aws-ebs-csi-driver" {
+  cluster_name = aws_eks_cluster.ms-sssm.name
+  addon_name   = "aws-ebs-csi-driver"
 }
 
 resource "local_file" "kubeconfig" {
